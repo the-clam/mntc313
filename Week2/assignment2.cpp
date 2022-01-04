@@ -3,7 +3,7 @@
 
 int main()
 {
-    //Define pre-set values.
+    //Define the pre-set values.
     float PI = 3.14;
     float INTERNAL_PRICE = 0.0183; // $/mm3
     float BATTERY_PRICE = 0.0095; // $/mm3
