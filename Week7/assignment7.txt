@@ -1,0 +1,77 @@
+//Include neccessary libraries and namespaces.
+#include <stdio.h>
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main()
+{
+    //All input variables.
+    float rockUnitWeight, firstDepthValue, depthIncrement, firstKValue, kValueIncrement;
+    int numDepthValues,numKValues;
+    
+    //User input for variables.
+    cout << "Input rock unit weight (kN/m3):" << endl;
+    cin >> rockUnitWeight;
+    cout << "Input number of depth values:" << endl;
+    cin >> numDepthValues;
+    cout << "Input first depth value (m):" << endl;
+    cin >> firstDepthValue;
+    cout << "Input depth increment (m):" << endl;
+    cin >> depthIncrement;
+    cout << "Input number of k values:" << endl;
+    cin >> numKValues;
+    cout << "Input first k value (m):" << endl;
+    cin >> firstKValue;
+    cout << "Input k increment (m):" << endl;
+    cin >> kValueIncrement;
+    cout << "Vertical stress values (kPa):" << endl;
+
+    //Array for storing calculated depth, vertical stress, and horizontal stress values.
+    float depthValues[numDepthValues];
+    float vertStress[numDepthValues];
+    float horzStress[numDepthValues][numKValues];
+    
+    //Calculating depth & vertical/horizontal stress values, storing the calculated values into arrays.   
+    for(int i = 0; i < numDepthValues; i++)
+    {
+        depthValues[i] = firstDepthValue + (i * depthIncrement);
+        vertStress[i] = depthValues[i] * rockUnitWeight;
+        
+        //Prints vertical stress values.
+        printf("%0.0f\n", vertStress[i]); 
+        
+        for(int j = 0; j < numKValues;j++)
+        {
+            horzStress[i][j] = vertStress[i] * (firstKValue + (j * kValueIncrement));
+        }
+    }
+
+    //Output information to file.
+    string filename = "outputFileA.txt";
+    FILE* fileOutput = fopen(filename.c_str(),"w");
+    for(int i = 0; i < numDepthValues; i++)
+    {
+        //Prints depth value to text file at beginning of each line.
+        fprintf(fileOutput,"%0.0f,",depthValues[i]);
+        for(int j = 0; j < numKValues; j++)
+        {
+            //Prints horizontal stress value to text file after depth value.
+            fprintf(fileOutput,"%0.0f",horzStress[i][j]);
+
+            //Only outputs comma to text file if not last value in line.
+            if(j != numKValues - 1)
+            {
+                fprintf(fileOutput,",");
+            }
+        }
+
+        //Only makes new line in text file if not the last row.
+        if(i != numDepthValues-1)
+        {
+            fprintf(fileOutput,"\n");
+        }
+    }
+    fclose(fileOutput);
+}
